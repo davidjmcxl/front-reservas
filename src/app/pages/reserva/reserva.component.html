@@ -1,0 +1,48 @@
+<form [formGroup]="buscadorForm" (ngSubmit)="buscarHoteles()">
+  <!-- Buscar por ciudad -->
+  <mat-form-field appearance="outline">
+    <mat-label>Ciudad</mat-label>
+    <input matInput formControlName="ciudad" placeholder="Ingrese la ciudad">
+  </mat-form-field>
+
+  <!-- Fecha de entrada -->
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de entrada</mat-label>
+    <input matInput [matDatepicker]="pickerEntrada" formControlName="fechaEntrada">
+    <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEntrada></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Fecha de salida -->
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de salida</mat-label>
+    <input matInput [matDatepicker]="pickerSalida" formControlName="fechaSalida">
+    <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+    <mat-datepicker #pickerSalida></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Cantidad de personas -->
+  <mat-form-field appearance="outline">
+    <mat-label>Cantidad de personas</mat-label>
+    <input matInput type="number" formControlName="cantidadPersonas" min="1">
+  </mat-form-field>
+
+  <!-- Botón de búsqueda -->
+  <button mat-raised-button color="primary" type="submit">Buscar</button>
+</form>
+
+<!-- Resultados -->
+<div *ngIf="hotelesFiltrados.length > 0">
+  <h3>Hoteles Disponibles</h3>
+  <div *ngFor="let hotel of hotelesFiltrados">
+    <mat-card>
+      <mat-card-title>{{ hotel.nombre }}</mat-card-title>
+      <mat-card-subtitle>{{ hotel.ciudad }}</mat-card-subtitle>
+      <p>Dirección: {{ hotel.direccion }}</p>
+
+      <p>Habitaciones disponibles: {{ getHabitacionesDisponibles(hotel) }}</p>
+
+
+    </mat-card>
+  </div>
+</div>
