@@ -1,0 +1,118 @@
+
+
+<div class="form-container">
+  <form [formGroup]="reservaForm" (ngSubmit)="reservar()">
+    <h2>Reserva en {{ data.hotel.nombre }}</h2>
+    <!-- Selección de Habitación y Cantidad de Personas en la misma línea -->
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Habitación</mat-label>
+        <mat-select formControlName="habitacion">
+          <mat-option *ngFor="let hab of habitacionesDisponibles" [value]="hab.id">
+            {{ hab.nombre }} (Capacidad: {{ hab.capacidad }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cantidad de personas</mat-label>
+        <input matInput type="number" formControlName="cantidadPersonas" [min]="1" [max]="capacidadHabitacionSeleccionada">
+      </mat-form-field>
+    </div>
+
+    <!-- Fechas en la misma línea -->
+    <div class="row">
+
+      <mat-form-field >
+        <mat-label>Fecha de entrada</mat-label>
+        <input matInput [matDatepicker]="pickerEntrada" formControlName="fechaEntrada">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEntrada></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Fecha de salida -->
+      <mat-form-field>
+        <mat-label>Fecha de salida</mat-label>
+        <input matInput [matDatepicker]="pickerSalida" formControlName="fechaSalida">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+        <mat-datepicker #pickerSalida></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+
+    <div formArrayName="huespedes">
+      <div *ngFor="let huesped of huespedes.controls; let i = index" [formGroupName]="i">
+        <mat-card>
+          <h3>Huésped {{i+1}}</h3>
+          <div class="row">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre Completo</mat-label>
+              <input matInput formControlName="nombreCompleto">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Fecha de Nacimiento</mat-label>
+              <input matInput [matDatepicker]="pickerNacimiento" formControlName="fechaNacimiento">
+              <mat-datepicker-toggle matIconSuffix [for]="pickerNacimiento"></mat-datepicker-toggle>
+              <mat-datepicker #pickerNacimiento></mat-datepicker>
+            </mat-form-field>
+
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Género</mat-label>
+              <mat-select formControlName="genero">
+                <mat-option value="Masculino">Masculino</mat-option>
+                <mat-option value="Femenino">Femenino</mat-option>
+                <mat-option value="Otro">Otro</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo de Documento</mat-label>
+              <mat-select formControlName="tipoDocumento">
+                <mat-option value="CC">Cedula ciudadania</mat-option>
+                <mat-option value="TI">Tarjeta de Identidad</mat-option>
+                <mat-option value="Pasaporte">Pasaporte</mat-option>
+                <mat-option value="Otro">Otro</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Número de Documento</mat-label>
+              <input matInput formControlName="numeroDocumento">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono">
+          </mat-form-field>
+        </mat-card>
+      </div>
+    </div>
+
+    <h3>Contacto de Emergencia</h3>
+    <div formGroupName="contactoEmergencia" class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre Completo</mat-label>
+        <input matInput formControlName="nombreCompleto">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono">
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="accent" type="submit" class="sticky-button" [disabled]="reservaForm.invalid">Confirmar Reserva</button>
+  </form>
+</div>

@@ -1,48 +1,80 @@
-<form [formGroup]="buscadorForm" (ngSubmit)="buscarHoteles()">
-  <!-- Buscar por ciudad -->
-  <mat-form-field appearance="outline">
-    <mat-label>Ciudad</mat-label>
-    <input matInput formControlName="ciudad" placeholder="Ingrese la ciudad">
-  </mat-form-field>
+<!-- Formulario de búsqueda -->
+<mat-toolbar color="primary">
+  <span class="logo">ReservasAPP</span>
 
-  <!-- Fecha de entrada -->
-  <mat-form-field appearance="outline">
-    <mat-label>Fecha de entrada</mat-label>
-    <input matInput [matDatepicker]="pickerEntrada" formControlName="fechaEntrada">
-    <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
-    <mat-datepicker #pickerEntrada></mat-datepicker>
-  </mat-form-field>
 
-  <!-- Fecha de salida -->
-  <mat-form-field appearance="outline">
-    <mat-label>Fecha de salida</mat-label>
-    <input matInput [matDatepicker]="pickerSalida" formControlName="fechaSalida">
-    <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
-    <mat-datepicker #pickerSalida></mat-datepicker>
-  </mat-form-field>
+<form [formGroup]="buscadorForm" (ngSubmit)="buscarHoteles()" class="buscador-container">
 
-  <!-- Cantidad de personas -->
-  <mat-form-field appearance="outline">
-    <mat-label>Cantidad de personas</mat-label>
-    <input matInput type="number" formControlName="cantidadPersonas" min="1">
-  </mat-form-field>
 
-  <!-- Botón de búsqueda -->
-  <button mat-raised-button color="primary" type="submit">Buscar</button>
+    <div class="form-fields">
+      <!-- Buscar por ciudad -->
+      <mat-form-field >
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="ciudad" placeholder="Ingrese la ciudad">
+      </mat-form-field>
+
+      <!-- Fecha de entrada -->
+      <mat-form-field >
+        <mat-label>Fecha de entrada</mat-label>
+        <input matInput [matDatepicker]="pickerEntrada" formControlName="fechaEntrada">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEntrada></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Fecha de salida -->
+      <mat-form-field>
+        <mat-label>Fecha de salida</mat-label>
+        <input matInput [matDatepicker]="pickerSalida" formControlName="fechaSalida">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+        <mat-datepicker #pickerSalida></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Cantidad de personas -->
+      <mat-form-field >
+        <mat-label>Cantidad de personas</mat-label>
+        <input matInput type="number" formControlName="cantidadPersonas" min="1">
+      </mat-form-field>
+
+    <!-- Botón de búsqueda -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="buscadorForm.invalid">Buscar</button>
+          <!-- Botón de refrescar -->
+          <button mat-icon-button color="accent" (click)="mostrarTodosLosHoteles()" matTooltip="Mostrar todos los hoteles">
+            <mat-icon class="refresh-icon">refresh</mat-icon>
+          </button>
+    </div>
+
+
+
+
 </form>
-
-<!-- Resultados -->
-<div *ngIf="hotelesFiltrados.length > 0">
-  <h3>Hoteles Disponibles</h3>
-  <div *ngFor="let hotel of hotelesFiltrados">
-    <mat-card>
-      <mat-card-title>{{ hotel.nombre }}</mat-card-title>
-      <mat-card-subtitle>{{ hotel.ciudad }}</mat-card-subtitle>
-      <p>Dirección: {{ hotel.direccion }}</p>
-
-      <p>Habitaciones disponibles: {{ getHabitacionesDisponibles(hotel) }}</p>
+</mat-toolbar>
 
 
+<div *ngIf="hotelesFiltrados.length > 0; else noHoteles">
+  <h2 class="titulo">🏨 Hoteles Disponibles</h2>
+
+  <div class="hotel-grid">
+    <mat-card *ngFor="let hotel of hotelesFiltrados; let i = index" class="hotel-card">
+      <!-- Imagen del hotel -->
+      <img mat-card-image [src]="'hotel-avatar' + (i + 1) + '.jpg'" alt="Imagen del hotel" class="hotel-img">
+
+      <mat-card-content>
+        <h2 class="hotel-nombre">🏨 {{ hotel.nombre }}</h2>
+        <p class="hotel-ciudad"><strong> Ciudad:</strong> {{ hotel.ciudad }}</p>
+        <p><strong> Dirección:</strong> {{ hotel.direccion }}</p>
+        <p><strong>🛏️ Habitaciones disponibles:</strong> {{ getHabitacionesDisponibles(hotel) }}</p>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button class="reservar-btn" (click)="reservar(hotel)  " >
+          🏷️ Reservar
+        </button>
+      </mat-card-actions>
     </mat-card>
   </div>
 </div>
+
+<!-- Mensaje cuando no hay hoteles disponibles -->
+<ng-template #noHoteles>
+  <h3 class="mensaje-error">❌ No hay hoteles disponibles </h3>
+</ng-template>
