@@ -63,5 +63,5 @@ jobs:
         with:
           app-name: 'reservas-smart-front'
           slot-name: 'Production'
-          package: .
+          package: dist/reservas-app/browser
           
